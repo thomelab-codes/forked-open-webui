@@ -3822,6 +3822,53 @@ IMAGES_EDIT_COMFYUI_WORKFLOW_NODES = PersistentConfig(
 )
 
 ####################################
+# Video Generation
+####################################
+
+ENABLE_VIDEO_GENERATION = PersistentConfig(
+    "ENABLE_VIDEO_GENERATION",
+    "video_generation.enable",
+    os.environ.get("ENABLE_VIDEO_GENERATION", "").lower() == "true",
+)
+
+VIDEO_GENERATION_ENGINE = PersistentConfig(
+    "VIDEO_GENERATION_ENGINE",
+    "video_generation.engine",
+    os.getenv("VIDEO_GENERATION_ENGINE", "openai"),
+)
+
+VIDEO_GENERATION_MODEL = PersistentConfig(
+    "VIDEO_GENERATION_MODEL",
+    "video_generation.model",
+    os.getenv("VIDEO_GENERATION_MODEL", ""),
+)
+
+VIDEOS_OPENAI_API_BASE_URL = PersistentConfig(
+    "VIDEOS_OPENAI_API_BASE_URL",
+    "video_generation.openai.api_base_url",
+    os.getenv("VIDEOS_OPENAI_API_BASE_URL", OPENAI_API_BASE_URL),
+)
+
+VIDEOS_OPENAI_API_KEY = PersistentConfig(
+    "VIDEOS_OPENAI_API_KEY",
+    "video_generation.openai.api_key",
+    os.getenv("VIDEOS_OPENAI_API_KEY", OPENAI_API_KEY),
+)
+
+VIDEOS_GEMINI_API_BASE_URL = PersistentConfig(
+    "VIDEOS_GEMINI_API_BASE_URL",
+    "video_generation.gemini.api_base_url",
+    os.getenv("VIDEOS_GEMINI_API_BASE_URL", GEMINI_API_BASE_URL),
+)
+
+VIDEOS_GEMINI_API_KEY = PersistentConfig(
+    "VIDEOS_GEMINI_API_KEY",
+    "video_generation.gemini.api_key",
+    os.getenv("VIDEOS_GEMINI_API_KEY", GEMINI_API_KEY),
+)
+
+
+####################################
 # Audio
 ####################################
 
