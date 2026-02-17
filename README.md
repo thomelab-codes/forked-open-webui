@@ -33,14 +33,52 @@ For upstream documentation, see the [Open WebUI Documentation](https://docs.open
 
 ## Quick Start with Docker Compose 🐳
 
-The fastest way to deploy Open WebUI is with Docker Compose directly from this repository. This spins up both **Ollama** (the LLM backend) and **Open WebUI** (the frontend) in a single command.
+The fastest way to deploy Open WebUI is with Docker Compose. Choose one of the methods below:
 
-### Prerequisites
+### Option A: Pre-built Images (Recommended — No Source Build)
+
+This is the simplest deployment method. You only need **two files** — no need to clone the full repository.
+
+1. **Download the compose file and optional env file:**
+
+   ```bash
+   # Download the pre-built compose file
+   curl -LO https://raw.githubusercontent.com/thomelab-codes/forked-open-webui/main/docker-compose.prebuilt.yaml
+
+   # (Optional) Download and configure environment variables
+   curl -LO https://raw.githubusercontent.com/thomelab-codes/forked-open-webui/main/.env.example
+   cp .env.example .env
+   ```
+
+2. **Start the stack:**
+
+   ```bash
+   docker compose -f docker-compose.prebuilt.yaml up -d
+   ```
+
+3. **Access the UI:**
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+4. **Stop the stack:**
+
+   ```bash
+   docker compose -f docker-compose.prebuilt.yaml down
+   ```
+
+> [!TIP]
+> The Ollama service includes a healthcheck. Open WebUI will wait for Ollama to be fully ready before starting.
+
+### Option B: Build from Source
+
+Use this if you want to customize the Docker image or develop locally.
+
+#### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) (v2+)
 - Git
 
-### Steps
+#### Steps
 
 1. **Clone the repository:**
 
@@ -90,7 +128,10 @@ The fastest way to deploy Open WebUI is with Docker Compose directly from this r
 
 ## Deployment Options
 
-This repository includes several Docker Compose **overlay files** that extend the base `docker-compose.yaml`. Combine them to tailor the deployment to your environment.
+This repository includes several Docker Compose **overlay files** that extend the base compose file. These overlays work with both `docker-compose.yaml` (build from source) and `docker-compose.prebuilt.yaml` (pre-built images). Combine them to tailor the deployment to your environment.
+
+> [!TIP]
+> In the examples below, replace `docker-compose.yaml` with `docker-compose.prebuilt.yaml` if you are using pre-built images.
 
 ### NVIDIA GPU Support
 
@@ -194,7 +235,7 @@ Key variables available in `.env.example`:
 
 | Variable | Default | Description |
 |---|---|---|
-| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama backend URL (overridden to `http://ollama:11434` by `docker-compose.yaml`) |
+| `OLLAMA_BASE_URL` | `http://ollama:11434` | Ollama backend URL (set in compose file; override for external Ollama) |
 | `OPENAI_API_BASE_URL` | *(empty)* | OpenAI-compatible API base URL |
 | `OPENAI_API_KEY` | *(empty)* | API key for OpenAI-compatible services |
 | `OPEN_WEBUI_PORT` | `3000` | Host port for the Open WebUI frontend |

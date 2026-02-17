@@ -1,0 +1,51 @@
+# ============================================================================
+# Docker Compose — Pre-built Image Deployment (No Source Build Required)
+# ============================================================================
+# Use this file for the simplest possible deployment. It pulls pre-built
+# images instead of building from source — no clone needed.
+#
+# Quick start:
+#   1. Download this file and (optionally) .env.example → .env
+#   2. Run:  docker compose -f docker-compose.prebuilt.yaml up -d
+#   3. Open: http://localhost:3000
+#
+# To add GPU support, combine with docker-compose.gpu.yaml:
+#   docker compose -f docker-compose.prebuilt.yaml -f docker-compose.gpu.yaml up -d
+# ============================================================================
+
+services:
+  ollama:
+    image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
+    container_name: ollama
+    volumes:
+      - ollama:/root/.ollama
+    pull_policy: always
+    tty: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list || exit 1"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 10s
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+    container_name: open-webui
+    volumes:
+      - open-webui:/app/backend/data
+    depends_on:
+      ollama:
+        condition: service_healthy
+    ports:
+      - ${OPEN_WEBUI_PORT-3000}:8080
+    environment:
+      - 'OLLAMA_BASE_URL=http://ollama:11434'
+      - 'WEBUI_SECRET_KEY='
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: unless-stopped
+
+volumes:
+  ollama: {}
+  open-webui: {}
