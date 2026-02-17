@@ -14,7 +14,7 @@
 	let loading = false;
 
 	let prompt = '';
-	let generatedVideos: { url: string }[] = [];
+	let generatedVideos: { url: string; prompt?: string }[] = [];
 
 	let promptTextareaElement: HTMLTextAreaElement;
 
@@ -36,7 +36,10 @@
 			const result = await videoGenerations(localStorage.token, prompt);
 
 			if (result) {
-				generatedVideos = [...result, ...generatedVideos];
+				generatedVideos = [
+					...result.map((v: { url: string }) => ({ ...v, prompt })),
+					...generatedVideos
+				];
 			}
 		} catch (error) {
 			console.error('Video generation error:', error);
@@ -90,6 +93,7 @@
 											class="w-full rounded-lg border border-gray-100/30 dark:border-gray-850/30"
 											controls
 											preload="metadata"
+											aria-label={video.prompt || $i18n.t('Generated video')}
 										/>
 										<div class="mt-1 flex justify-end">
 											<button

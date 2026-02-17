@@ -4,8 +4,6 @@ import io
 import json
 import logging
 import mimetypes
-import time
-from pathlib import Path
 from typing import Optional
 
 import requests
@@ -16,7 +14,7 @@ from open_webui.constants import ERROR_MESSAGES
 from open_webui.env import ENABLE_FORWARD_USER_INFO_HEADERS
 
 from open_webui.models.chats import Chats
-from open_webui.routers.files import upload_file_handler, get_file_content_by_id
+from open_webui.routers.files import upload_file_handler
 from open_webui.utils.auth import get_admin_user, get_verified_user
 from open_webui.utils.access_control import has_permission
 from open_webui.utils.headers import include_user_info_headers
@@ -26,6 +24,9 @@ log = logging.getLogger(__name__)
 
 VIDEO_CACHE_DIR = CACHE_DIR / "video" / "generations"
 VIDEO_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+MAX_POLL_ATTEMPTS = 120
+POLL_INTERVAL_SECONDS = 5
 
 router = APIRouter()
 
@@ -249,8 +250,8 @@ async def video_generations(
                 job_id = res["id"]
                 poll_url = f"{request.app.state.config.VIDEOS_OPENAI_API_BASE_URL}/videos/generations/{job_id}"
 
-                for _ in range(120):  # Poll for up to 10 minutes
-                    await asyncio.sleep(5)
+                for _ in range(MAX_POLL_ATTEMPTS):
+                    await asyncio.sleep(POLL_INTERVAL_SECONDS)
                     poll_r = await asyncio.to_thread(
                         requests.get,
                         url=poll_url,
@@ -327,8 +328,8 @@ async def video_generations(
                 operation_name = res["name"]
                 poll_url = f"{request.app.state.config.VIDEOS_GEMINI_API_BASE_URL}/operations/{operation_name}"
 
-                for _ in range(120):  # Poll for up to 10 minutes
-                    await asyncio.sleep(5)
+                for _ in range(MAX_POLL_ATTEMPTS):
+                    await asyncio.sleep(POLL_INTERVAL_SECONDS)
                     poll_r = await asyncio.to_thread(
                         requests.get,
                         url=poll_url,
