@@ -12,6 +12,7 @@
 	import Pipelines from './Settings/Pipelines.svelte';
 	import Audio from './Settings/Audio.svelte';
 	import Images from './Settings/Images.svelte';
+	import Videos from './Settings/Videos.svelte';
 	import Interface from './Settings/Interface.svelte';
 	import Models from './Settings/Models.svelte';
 	import Connections from './Settings/Connections.svelte';
@@ -47,6 +48,7 @@
 			'interface',
 			'audio',
 			'images',
+			'videos',
 			'pipelines',
 			'db'
 		].includes(tabFromPath)
@@ -229,6 +231,19 @@
 				'stable diffusion',
 				'comfyui',
 				'automatic1111',
+				'gemini'
+			]
+		},
+		{
+			id: 'videos',
+			title: 'Videos',
+			route: '/admin/settings/videos',
+			keywords: [
+				'videos',
+				'video generation',
+				'sora',
+				'veo',
+				'openai',
 				'gemini'
 			]
 		},
@@ -465,6 +480,17 @@
 								clip-rule="evenodd"
 							/>
 						</svg>
+					{:else if tab.id === 'videos'}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 16 16"
+							fill="currentColor"
+							class="w-4 h-4"
+						>
+							<path
+								d="M3 4.75A2.75 2.75 0 0 1 5.75 2h4.5A2.75 2.75 0 0 1 13 4.75v6.5A2.75 2.75 0 0 1 10.25 14h-4.5A2.75 2.75 0 0 1 3 11.25v-6.5Zm3.5 3a.75.75 0 0 0 1.168.624l2-1.334a.75.75 0 0 0 0-1.248l-2-1.334A.75.75 0 0 0 6.5 5.084v2.666Z"
+							/>
+						</svg>
 					{:else if tab.id === 'pipelines'}
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -569,6 +595,12 @@
 			/>
 		{:else if selectedTab === 'images'}
 			<Images
+				on:save={() => {
+					toast.success($i18n.t('Settings saved successfully!'));
+				}}
+			/>
+		{:else if selectedTab === 'videos'}
+			<Videos
 				on:save={() => {
 					toast.success($i18n.t('Settings saved successfully!'));
 				}}
