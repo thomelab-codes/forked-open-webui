@@ -185,7 +185,7 @@ Key variables in `.env`:
 
 | Variable | Default | Description |
 |---|---|---|
-| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama backend URL |
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama backend URL (overridden to `http://ollama:11434` by `docker-compose.yaml`) |
 | `OPENAI_API_BASE_URL` | *(empty)* | OpenAI-compatible API base URL |
 | `OPENAI_API_KEY` | *(empty)* | API key for OpenAI-compatible services |
 | `OPEN_WEBUI_PORT` | `3000` | Host port for the Open WebUI frontend |
