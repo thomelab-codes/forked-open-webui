@@ -181,6 +181,11 @@ type Settings = {
 	userLocation?: any;
 	webSearch?: any;
 	memory?: boolean;
+	customInstructions?: string;
+	responseTone?: string;
+	responseVerbosity?: string;
+	responseFormat?: string;
+	userProfileAbout?: string;
 	autoTags?: boolean;
 	autoFollowUps?: boolean;
 	splitLargeChunks?(body: any, splitLargeChunks: any): unknown;

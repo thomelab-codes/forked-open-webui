@@ -1223,6 +1223,69 @@ async def chat_completion_tools_handler(
     return body, {"sources": sources}
 
 
+def apply_user_personalization(form_data: dict, user) -> dict:
+    """Inject user personalization preferences into the system message.
+
+    Reads customInstructions, responseTone, responseVerbosity, responseFormat,
+    and userProfileAbout from user.settings.ui and appends them to the system
+    message so every conversation is tailored to the user's preferences.
+    """
+    if not user or not hasattr(user, "settings") or not user.settings:
+        return form_data
+
+    ui_settings = {}
+    if isinstance(user.settings, dict):
+        ui_settings = user.settings.get("ui", {}) or {}
+    elif hasattr(user.settings, "ui"):
+        ui_settings = user.settings.ui or {}
+
+    if not ui_settings:
+        return form_data
+
+    personalization_parts = []
+
+    # User profile context
+    user_profile_about = ui_settings.get("userProfileAbout", "")
+    if user_profile_about:
+        personalization_parts.append(f"About the user: {user_profile_about}")
+
+    # Response preferences
+    response_prefs = []
+    tone = ui_settings.get("responseTone", "")
+    if tone and tone != "default":
+        response_prefs.append(f"tone: {tone}")
+
+    verbosity = ui_settings.get("responseVerbosity", "")
+    if verbosity and verbosity != "default":
+        response_prefs.append(f"verbosity: {verbosity}")
+
+    fmt = ui_settings.get("responseFormat", "")
+    if fmt and fmt != "default":
+        response_prefs.append(f"format: {fmt}")
+
+    if response_prefs:
+        personalization_parts.append(
+            f"Response style preferences: {', '.join(response_prefs)}"
+        )
+
+    # Custom instructions
+    custom_instructions = ui_settings.get("customInstructions", "")
+    if custom_instructions:
+        personalization_parts.append(
+            f"Custom instructions from the user: {custom_instructions}"
+        )
+
+    if personalization_parts:
+        personalization_context = (
+            "User Personalization:\n" + "\n".join(personalization_parts) + "\n"
+        )
+        form_data["messages"] = add_or_update_system_message(
+            personalization_context, form_data["messages"], append=True
+        )
+
+    return form_data
+
+
 async def chat_memory_handler(
     request: Request, form_data: dict, extra_params: dict, user
 ):
@@ -2143,6 +2206,9 @@ async def process_chat_payload(request, form_data, user, metadata, model):
         )
     except Exception as e:
         raise Exception(f"{e}")
+
+    # Inject user personalization preferences into the system message
+    form_data = apply_user_personalization(form_data, user)
 
     features = form_data.pop("features", None) or {}
     extra_params["__features__"] = features
