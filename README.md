@@ -53,10 +53,19 @@ The fastest way to deploy Open WebUI is with Docker Compose directly from this r
 
    ```bash
    cp .env.example .env
-   # Edit .env to set API keys or other settings
+   # Edit .env to set API keys, ports, image tags, and other settings
    ```
 
-3. **Start the stack:**
+3. **(Optional) Add local overrides:**
+
+   ```bash
+   cp docker-compose.override.yaml.example docker-compose.override.yaml
+   # Uncomment the sections you need (GPU, API exposure, data bind-mount, etc.)
+   ```
+
+   Docker Compose automatically merges `docker-compose.override.yaml` with the base file.
+
+4. **Start the stack:**
 
    ```bash
    docker compose up -d
@@ -64,11 +73,11 @@ The fastest way to deploy Open WebUI is with Docker Compose directly from this r
 
    This builds the Open WebUI image from the included `Dockerfile` and pulls the Ollama image, then starts both services.
 
-4. **Access the UI:**
+5. **Access the UI:**
 
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-5. **Stop the stack:**
+6. **Stop the stack:**
 
    ```bash
    docker compose down
@@ -181,7 +190,7 @@ Copy `.env.example` to `.env` and edit as needed:
 cp .env.example .env
 ```
 
-Key variables in `.env`:
+Key variables available in `.env.example`:
 
 | Variable | Default | Description |
 |---|---|---|
@@ -189,14 +198,25 @@ Key variables in `.env`:
 | `OPENAI_API_BASE_URL` | *(empty)* | OpenAI-compatible API base URL |
 | `OPENAI_API_KEY` | *(empty)* | API key for OpenAI-compatible services |
 | `OPEN_WEBUI_PORT` | `3000` | Host port for the Open WebUI frontend |
-
-Variables set in `docker-compose.yaml`:
-
-| Variable | Default | Description |
-|---|---|---|
 | `WEBUI_DOCKER_TAG` | `main` | Docker image tag for Open WebUI |
 | `OLLAMA_DOCKER_TAG` | `latest` | Docker image tag for Ollama |
-| `WEBUI_SECRET_KEY` | *(empty)* | Secret key for session security |
+| `WEBUI_SECRET_KEY` | *(empty)* | Secret key for session security (auto-generated on first run if empty) |
+| `OLLAMA_GPU_DRIVER` | `nvidia` | GPU driver (`docker-compose.gpu.yaml`) |
+| `OLLAMA_GPU_COUNT` | `1` | Number of GPUs or `all` (`docker-compose.gpu.yaml`) |
+| `OLLAMA_WEBAPI_PORT` | `11434` | Host port for Ollama API (`docker-compose.api.yaml`) |
+| `OLLAMA_DATA_DIR` | `./ollama-data` | Host path for Ollama data (`docker-compose.data.yaml`) |
+| `HSA_OVERRIDE_GFX_VERSION` | `11.0.0` | AMD GFX version (`docker-compose.amdgpu.yaml`) |
+
+### Local Overrides
+
+For persistent local customization, copy the example override file:
+
+```bash
+cp docker-compose.override.yaml.example docker-compose.override.yaml
+```
+
+Docker Compose automatically merges `docker-compose.override.yaml` with `docker-compose.yaml`.  
+Uncomment the sections you need (GPU, API exposure, data bind-mount, OpenAI keys, etc.) — no need to pass multiple `-f` flags.
 
 ### Makefile
 
