@@ -59,7 +59,9 @@ on:submit|preventDefault={saveHandler}
 <div class="py-1 overflow-y-scroll max-h-[28rem] md:max-h-full">
 <!-- Custom Instructions -->
 <div class="mb-4">
-<div class="text-sm font-medium mb-1">{$i18n.t('Custom Instructions')}</div>
+<div class="text-sm font-medium mb-1" id="custom-instructions-label">
+{$i18n.t('Custom Instructions')}
+</div>
 <div class="text-xs text-gray-600 dark:text-gray-400 mb-2">
 {$i18n.t(
 'Provide instructions that the AI should follow in every conversation. These are automatically included with each message you send.'
@@ -67,6 +69,7 @@ on:submit|preventDefault={saveHandler}
 </div>
 <textarea
 bind:value={customInstructions}
+aria-labelledby="custom-instructions-label"
 class="w-full text-sm bg-transparent outline-none resize-vertical rounded-xl p-3 outline outline-1 outline-gray-100 dark:outline-gray-800"
 rows="3"
 placeholder={$i18n.t(
@@ -86,10 +89,12 @@ placeholder={$i18n.t(
 <div class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
 {$i18n.t('Tone')}
 </div>
-<div class="flex flex-wrap gap-2">
+<div class="flex flex-wrap gap-2" role="radiogroup" aria-label={$i18n.t('Tone')}>
 {#each [{ value: 'default', label: 'Default' }, { value: 'professional', label: 'Professional' }, { value: 'casual', label: 'Casual' }, { value: 'friendly', label: 'Friendly' }, { value: 'academic', label: 'Academic' }] as option}
 <button
 type="button"
+role="radio"
+aria-checked={responseTone === option.value}
 class="px-3 py-1 text-xs rounded-full transition {responseTone === option.value
 ? 'bg-black text-white dark:bg-white dark:text-black'
 : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'}"
@@ -108,10 +113,12 @@ responseTone = option.value;
 <div class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
 {$i18n.t('Verbosity')}
 </div>
-<div class="flex flex-wrap gap-2">
+<div class="flex flex-wrap gap-2" role="radiogroup" aria-label={$i18n.t('Verbosity')}>
 {#each [{ value: 'default', label: 'Default' }, { value: 'concise', label: 'Concise' }, { value: 'balanced', label: 'Balanced' }, { value: 'detailed', label: 'Detailed' }] as option}
 <button
 type="button"
+role="radio"
+aria-checked={responseVerbosity === option.value}
 class="px-3 py-1 text-xs rounded-full transition {responseVerbosity ===
 option.value
 ? 'bg-black text-white dark:bg-white dark:text-black'
@@ -131,10 +138,16 @@ responseVerbosity = option.value;
 <div class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
 {$i18n.t('Response Format')}
 </div>
-<div class="flex flex-wrap gap-2">
+<div
+class="flex flex-wrap gap-2"
+role="radiogroup"
+aria-label={$i18n.t('Response Format')}
+>
 {#each [{ value: 'default', label: 'Default' }, { value: 'markdown', label: 'Markdown' }, { value: 'plain', label: 'Plain Text' }, { value: 'structured', label: 'Structured' }] as option}
 <button
 type="button"
+role="radio"
+aria-checked={responseFormat === option.value}
 class="px-3 py-1 text-xs rounded-full transition {responseFormat === option.value
 ? 'bg-black text-white dark:bg-white dark:text-black'
 : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'}"
@@ -153,7 +166,7 @@ responseFormat = option.value;
 
 <!-- About Me -->
 <div class="mb-4">
-<div class="text-sm font-medium mb-1">{$i18n.t('About Me')}</div>
+<div class="text-sm font-medium mb-1" id="about-me-label">{$i18n.t('About Me')}</div>
 <div class="text-xs text-gray-600 dark:text-gray-400 mb-2">
 {$i18n.t(
 'Share context about yourself so the AI can tailor its responses. This information is included as context in your conversations.'
@@ -161,6 +174,7 @@ responseFormat = option.value;
 </div>
 <textarea
 bind:value={userProfileAbout}
+aria-labelledby="about-me-label"
 class="w-full text-sm bg-transparent outline-none resize-vertical rounded-xl p-3 outline outline-1 outline-gray-100 dark:outline-gray-800"
 rows="3"
 placeholder={$i18n.t(
