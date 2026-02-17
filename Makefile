@@ -1,8 +1,8 @@
 
-ifneq ($(shell which docker-compose 2>/dev/null),)
-    DOCKER_COMPOSE := docker-compose
-else
+ifneq ($(shell docker compose version 2>/dev/null),)
     DOCKER_COMPOSE := docker compose
+else
+    DOCKER_COMPOSE := docker-compose
 endif
 
 install:
