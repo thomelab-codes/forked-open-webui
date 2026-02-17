@@ -237,13 +237,17 @@
 			id: 'personalization',
 			title: 'Personalization',
 			keywords: [
+				'about me',
 				'account preferences',
 				'account settings',
 				'accountpreferences',
 				'accountsettings',
+				'custom instructions',
 				'custom settings',
+				'custominstructions',
 				'customsettings',
 				'experimental',
+				'format',
 				'memories',
 				'memory',
 				'personalization',
@@ -251,8 +255,12 @@
 				'personal settings',
 				'personalsettings',
 				'profile',
+				'response preferences',
+				'response style',
+				'tone',
 				'user preferences',
-				'userpreferences'
+				'userpreferences',
+				'verbosity'
 			]
 		},
 		{
@@ -492,10 +500,7 @@
 			}
 
 			if (tab.id === 'personalization') {
-				return (
-					$config?.features?.enable_memories &&
-					($user?.role === 'admin' || ($user?.permissions?.features?.memories ?? true))
-				);
+				return true;
 			}
 
 			return true;
