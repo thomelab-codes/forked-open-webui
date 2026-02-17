@@ -13,39 +13,37 @@
 #   docker compose up -d
 # ============================================================================
 
-services:
-  # ---------- Ollama overrides -----------------------------------------------
-  # Uncomment the ollama service block and the options you need:
-  #
-  # ollama:
-  #   # --- NVIDIA GPU support (same as docker-compose.gpu.yaml) ---
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: ${OLLAMA_GPU_DRIVER-nvidia}
-  #             count: ${OLLAMA_GPU_COUNT-1}
-  #             capabilities:
-  #               - gpu
-  #
-  #   # --- AMD GPU support (same as docker-compose.amdgpu.yaml) ---
-  #   # devices:
-  #   #   - /dev/kfd:/dev/kfd
-  #   #   - /dev/dri:/dev/dri
-  #   # image: ollama/ollama:${OLLAMA_DOCKER_TAG-rocm}
-  #   # environment:
-  #   #   - 'HSA_OVERRIDE_GFX_VERSION=${HSA_OVERRIDE_GFX_VERSION-11.0.0}'
-  #
-  #   # --- Expose Ollama API (same as docker-compose.api.yaml) ---
-  #   # ports:
-  #   #   - ${OLLAMA_WEBAPI_PORT-11434}:11434
-  #
-  #   # --- Bind-mount data dir (same as docker-compose.data.yaml) ---
-  #   # volumes:
-  #   #   - ${OLLAMA_DATA_DIR-./ollama-data}:/root/.ollama
-
-  # ---------- Open WebUI overrides -------------------------------------------
-  open-webui:
-    environment:
-      - 'OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL-}'
-      - 'OPENAI_API_KEY=${OPENAI_API_KEY-}'
+# services:
+#   # ---------- Ollama overrides -----------------------------------------------
+#   ollama:
+#     # --- NVIDIA GPU support (same as docker-compose.gpu.yaml) ---
+#     deploy:
+#       resources:
+#         reservations:
+#           devices:
+#             - driver: ${OLLAMA_GPU_DRIVER-nvidia}
+#               count: ${OLLAMA_GPU_COUNT-1}
+#               capabilities:
+#                 - gpu
+#
+#     # --- AMD GPU support (same as docker-compose.amdgpu.yaml) ---
+#     # devices:
+#     #   - /dev/kfd:/dev/kfd
+#     #   - /dev/dri:/dev/dri
+#     # image: ollama/ollama:${OLLAMA_DOCKER_TAG-rocm}
+#     # environment:
+#     #   - 'HSA_OVERRIDE_GFX_VERSION=${HSA_OVERRIDE_GFX_VERSION-11.0.0}'
+#
+#     # --- Expose Ollama API (same as docker-compose.api.yaml) ---
+#     # ports:
+#     #   - ${OLLAMA_WEBAPI_PORT-11434}:11434
+#
+#     # --- Bind-mount data dir (same as docker-compose.data.yaml) ---
+#     # volumes:
+#     #   - ${OLLAMA_DATA_DIR-./ollama-data}:/root/.ollama
+#
+#   # ---------- Open WebUI overrides -------------------------------------------
+#   open-webui:
+#     environment:
+#       - 'OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL-}'
+#       - 'OPENAI_API_KEY=${OPENAI_API_KEY-}'

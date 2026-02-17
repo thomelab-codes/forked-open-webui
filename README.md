@@ -190,7 +190,7 @@ Copy `.env.example` to `.env` and edit as needed:
 cp .env.example .env
 ```
 
-Key variables in `.env` (all also listed in `.env.example`):
+Key variables available in `.env.example`:
 
 | Variable | Default | Description |
 |---|---|---|
